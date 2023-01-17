@@ -1,0 +1,7 @@
+./builds/
+builds/*
+online*
+*.o
+builds/buildsMain/*
+MD-CUBE.Polymer
+.logfile*

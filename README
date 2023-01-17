@@ -1,0 +1,120 @@
+# ======================
+README (Sometime in 2019)
+
+AUTHOR: Marco Krummenacher (marco.krummenacher@unibas.ch)
+
+1. MEMBRANE-VESICLE STUDIES
+1.1 MAKEFILE FLAGS
+	TYPE      = melt				> A polymer melt and NOT single polymers are simulated; the polymers can interact with eachother
+	SPRING    = fene				> For the connection between the monomers the FENE potential is used
+	SIMTYPE  := Polymer				> A polymer system is simulated NOT an impact system
+	BOUNDARY  = reflectingall		> The simulation box has reflecting boundary conditions in all three directions
+	
+1.2 INFILE
+	NUM_HEAD_PARTICLES				> Gives the number of hydrophilic head particles of a lipid (use 1 for a three bead model)
+	
+	PRERUN							> 0: all interactions are turned on; all hydrophobic particles interact with eachother 
+									> 1: lipids interact only with other lipids; NO polymer-polymer or lipid-polymer interaction
+									> 2: lipids interact with lipids; polymers interact with polymers; NO lipid-polymer interaction
+									> 3: actin-myosin interaction: one myosin acts only with tow different actin
+									> use first 1 or 2 for equilibration of the lipids and then 0 for the interaction of the lipids with polymers
+									> do NOT use 3 for membrane-polymer symulations! 
+
+	BOX_RESET_DIRECTION				> 0: all particles are distributed equally inside the simulation box
+									> 1: particle distribution is shrinked in all directions (enhance vesicle formation)
+									> 2: particle distribution is shrinked in z-direction (enhance membrane formation)
+									> 3: Lipids are in subbox and polymers are in shell arround the lipids (hybride studies)
+									
+	BOX_RESET_VAL					> A value between 0 and 1 how much the initialization is shrinked 
+									> (1 means that the initialization is not shrinked and 0.75 is ideal for hybrid studies)
+									
+	EXP_WAT							> 0: no explicit water; if water is simulated implicitly then use Solver 1 (Langevin Solver)
+									> 1: explicit water; use Solver 0 (Velocity Verlet Solver)
+									> for membrane/vesicle/hybrid studies use 0 (IMPLICIT WATER)
+									
+	WAT_DEN							> A value between 0 and 1 which gives the density of the water
+									> 0 no water particles are initiated; 1: all free space is occupied by water particles
+									> this value is NOT used for membrane/vesicle/hybrid studies 
+									
+	HYDROPHOBIC_TOPOLOGY			> 0: The branched polymer has no hydrophobic topology
+									> 1: The branched polymer has hydrophobic packbone and hydrophilic chains (be aware that a bottle brush is initialized)
+									> 2: The branched polymer is half hydrophobic and half hydrophilic (be aware that a bottle brush is initialized)
+									> 3: The branched polymer is a star with a hydrophilic core (be aware that a star is initialized)
+									> 4: The polymer is a linear actin (be aware that NUM_ARMS_PER_BRANCHED_MOLECULE = 0 and NUM_PARTICLES_PER_ARM = 0)
+									> For studying interaction of membranes with branched poylmers use topologies 1,2 or 3
+							
+	START_HYDROPHOBIC				> A value with give the number of particles which are hydrophobic for each hydrophobic topology
+									> HYDROPHOBIC_TOPOLOGY=1: NO value has to be set (all particles of the backbone are automatically hydrophobic)
+									> HYDROPHOBIC_TOPOLOGY=2: After the given number of particles the bottle brush starts to be hydrophobic
+									> HYDROPHOBIC_TOPOLOGY=3: Number of particles at each end of the star which are to be hydrophobic
+									> HYDROPHOBIC_TOPOLOGY=4: NO value has to be set (this is for actin-myosin simulations)
+	
+
+2. ACTIN-MYOSIN STUDIES
+2.1 MAKEFILE FLAGS
+	TYPE      = melt				> A polymer melt and NOT single polymers are simulated; the polymers can interact with eachother
+	SPRING    = fene				> For the connection between the monomers the FENE potential is used
+	SIMTYPE  := Polymer				> A polymer system is simulated NOT an impact system
+	BOUNDARY  = periodic			> The simulation box has periodic boundary conditions, since the VelocityVerlet solver has not implemented reflecting boundary conditions
+	
+2.2 INFILE
+	NUM_HEAD_PARTICLES				> Gives the number of hydrophilic at each end of the chain (if 1 on each side one particle is hydrophobic like an ABA blockcopolymer)
+	
+	PRERUN							> 0: all interactions are turned on; all hydrophobic particles interact with eachother 
+									> 1: lipids interact only with other lipids; NO polymer-polymer or lipid-polymer interaction
+									> 2: lipids interact with lipids; polymers interact with polymers; NO lipid-polymer interaction
+									> 3: actin-myosin interaction: one myosin acts only with tow different actin
+									> use for actin-mysion 3 otherwise the interactions are not according to the model in nature 
+
+	BOX_RESET_DIRECTION				> 0: all particles are distributed equally inside the simulation box
+									> 1: particle distribution is shrinked in all directions (enhance vesicle formation)
+									> 2: particle distribution is shrinked in z-direction (enhance membrane formation)
+									> 3: Lipids are in subbox and polymers are in shell arround the lipids (hybride studies)
+									> use 0 for actin-myosin simulations since actin and myosin are distributed equally inside the simulation box
+									
+	BOX_RESET_VAL					> A value between 0 and 1 how much the initialization is shrinked 
+									> Value has NOT to be adjusted for actin-myosin simulations
+									
+	EXP_WAT							> 0: no explicit water; if water is simulated implicitly then use Solver 1 (Langevin Solver)
+									> 1: explicit water; use Solver 0 (Velocity Verlet Solver)
+									> use 1 since later shockwaves are applied to the actin-myosin system
+									
+	WAT_DEN							> A value between 0 and 1 which gives the density of the water
+									> 0 no water particles are initiated; 1: all free space is occupied by water particles
+									> Use a high density in order to simulate liquid water (0.8-0.95) 
+									
+	HYDROPHOBIC_TOPOLOGY			> 0: The branched polymer has no hydrophobic topology
+									> 1: The branched polymer has hydrophobic packbone and hydrophilic chains (be aware that a bottle brush is initialized)
+									> 2: The branched polymer is half hydrophobic and half hydrophilic (be aware that a bottle brush is initialized)
+									> 3: The branched polymer is a star with a hydrophilic core (be aware that a star is initialized)
+									> 4: The polymer is a linear actin (be aware that NUM_ARMS_PER_BRANCHED_MOLECULE = 0 and NUM_PARTICLES_PER_ARM = 0)
+									> For studying actin-myosin USE 4 (THIS PARAMETER IS VERY IMPORTANT FOR ACTIN-MYOSIN SIMULATIONS!!)
+							
+	START_HYDROPHOBIC				> A value with give the number of particles which are hydrophobic for each hydrophobic topology
+									> HYDROPHOBIC_TOPOLOGY=1: NO value has to be set (all particles of the backbone are automatically hydrophobic)
+									> HYDROPHOBIC_TOPOLOGY=2: After the given number of particles the bottle brush starts to be hydrophobic
+									> HYDROPHOBIC_TOPOLOGY=3: Number of particles at each end of the star which are to be hydrophobic
+									> HYDROPHOBIC_TOPOLOGY=4: NO value has to be set (this is for actin-myosin simulations)
+	
+	SHOCKWAVE						> 0: Water particles are not accelerated
+									> 1: Water particles are accelerated in x-direction
+									> 2: Water particles are accelerated in x-direction in a sinus-shaped curve
+									> 3: Water particles are accelerated in x-direction in an exponental decay
+									> 4: Water particles are accelerated in x-direction in an exponental increase
+									
+	SHOCK_VELOCITY					> Determines the velocity which is added to the water particles in x-direction
+									> if the velocity is too high, singularites in the LJ-potential can appear 
+									> and the code becomes nummerically instable
+	
+	SHOCK_SLICE						> Gives the slice dx in which the particles are accelerated
+									> e.g. 0.1 means that dx is 10 percent of the box.
+	
+										
+									
+	
+	
+
+
+
+
+

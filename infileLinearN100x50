@@ -1,0 +1,207 @@
+*** ==============================================================================
+***  Parameter template file for the program suite MD-CUBE.
+***  Author: Prof. Dr. rer. nat. habil. Martin O. Steinhauser
+***          Copyright 2003-today
+***  -----------------------------------------------
+***  Frankfurt University of Applied Science
+***  Faculty of Computer Science and Engineering
+***  Building 8, Room 115
+***  Nibelungenplatz 1
+***  D-60318 Frankfurt am Main
+***  https://www.frankfurt-university.de/steinhauser
+***  E-Mail: martin.steinhauser@fb2.fra-uas.de
+***  https.//www.researchgate.net/profile/Martin-Steinhauser
+* ------------------------------------------------------------------------------
+*
+*  Versions:  3.6.1 (11 May 2015)
+*			  3.6 	(01 Feb 2013)
+*			  3.5 	(01 Apr 2010)
+*             3.4 	(01 Oct 2008)
+*             3.3 	(25 Jan 2006)
+*
+*	IMPORTANT REMARK: I will eventually (after a current Master thesis is on its 
+*                     track) go back to the old format, where the number of 
+*					  parameters in the infiles had to match exactly their 
+*					  number in MD-CUBE (main program) and everything was 
+*					  checked thoroughly.
+* ------------------------------------------------------------------------------
+*  FORMAT:   <KEY WORD> <NUMBER>
+* 
+*  DESCRIPTION:
+*  Each KEY WORD has to be IN CAPITAL LETTERS, followed by a number 
+*  (either integer or double) 
+*  key words can be left out (but shouldn't). Then default values will apply in
+*  the main program (check this !).
+*  Every line, except if it starts with a KEY WORD is ignored.
+*  The order of KEY WORDs in principle is arbitrary.
+*  The provided order of KEY WORDs however is strongly recommended to keep
+*  the input file readable and tidy.
+* 
+*  HOW TO ADD NEW KEY WORDS:
+*  If key words are to be added to or removed from this infile, the module 
+*  "InitParameters.c" implementing the function for reading this file has to be 
+*  altered appropriately. It is important that no KEY WORD may appear twice or 
+*  may be a subset of another KEY WORD (e.g. 'MD' in 'MDSIM'). For this case, 
+*  the string comparison is not robust which will cause failure. I could fix 
+*  this but I don't feel like going through that trouble so THE USER HAS TO KNOW
+*  WHAT SHE IS DOING when changing anything here!
+# ==============================================================================
+#
+#  REMARK: The following two lines of copyright notice are mandatory - deleting 
+#  them will cause failure.
+# ==============================================================================
+#
+#
+MD-CUBE
+Copyright Dr. Martin O. Steinhauser 2003-present
+#
+#
+#=========================================
+KEY                        GENERAL_SECTION
+KEY BASICS
+#----------------------------------------
+NUM_PARTICLES_LIN_TOTAL				5000
+NUM_PARTICLES_PER_LIN_CHAIN			100
+NUM_LIN_CHAINS						50
+NUM_HEAD_PARTICLES					0        # for membranes, at least 1
+NUM_MD_CYCLES_TOTAL					5000
+NUM_VELOCITY_SCALE					0	
+RATE_SAVE_SYSTEM_ALL				9000	
+RATE_SAVE_DATA_ALL					7900
+NUM_SAVE_VELOCITY					0
+WARMUP_STEPS                    	1000
+PRERUN                              0       # 0: all interactions 1: lipid-lipid inter.; 2: no lipid-polymer; 3: actin-myosin
+DENSITY 							0.85 
+BOX_RESET_DIRECTION                 0       # 0: no reset; 1: reset in all directions; 2: reset in z-direction
+BOX_RESET_VAL                       0     	# percentage ov how much the box is to be reseted for initialization
+EXP_WAT								0		# 0: implicit water (use LangevinSolver:1) 1: explicit water (use VelocityVerletSolver: 0)
+WAT_DEN								0.0
+SHOCKWAVE							0
+SHOCK_VELOCITY						0.0
+SHOCK_SLICE							0.
+BOX_X								20	
+BOX_Y								20
+BOX_Z								20
+TIMESTEP							0.01	
+TEMPERATURE							1.0
+LINKED_CELL_SKIN_RANGE				0.4 
+FRICTION_CONSTANT					1
+INIT_SEND_MAIL						0
+INIT_CHECK_SETUP					0
+NUM_MC_CYCLES_PIVOT					0
+NUM_MC_CYCLES_TOTAL          		0
+NUM_PIVOT_BEGIN						0
+RATE_PIVOT_REPEAT					0
+DIMENSION							3
+PERIODIC_BC_X                   	1
+PERIODIC_BC_Y                   	1
+PERIODIC_BC_Z                   	1
+SOLVER                          	1				#0: VelocityVerletSolver; 1: LangevinSolver
+PRINT_SCREEN_INFO               	0
+PRINT_LOGFILE_INFO              	0
+USE_NEW_INFILE_PARAMS				1
+SAVED_STEPS                    	 	0
+# -----------------------------------------
+
+
+#=========================================
+KEY                     POTENTIALS_SECTION
+KEY POTENTIALS
+#-----------------------------------------
+POT_TOTAL_DEPTH						0.0
+POT_RANGE_LJ						1.12246204830937298142		
+POT_SHIFT_LJ						1.0
+POT_RANGE_FENE						1.5
+POT_RANGE_COSINE					1.5
+POT_STRENGTH_COULOMB				0
+POT_BONDLENGTH_PARABOLIC			0
+POT_TORSION							30.0
+POT_TOR_BACKBONE					50.0
+POT_KAPPA                       	30.0
+POT_MEM_DEPTH						1.0						# usually the same as pot_shift_lj
+POT_MEM_RANGE						1.12246204830937298142	# usually the same as pot_range_lj
+POT_MEM_DECAY						1.8						# >= 0.8 to get a stable fluid bilayer membrane (dependent on the temperature!)
+POT_BEND_KAPPA						0.0                      # unimportant
+POT_BEND_ANGLE						0.0                     # unimportant
+#-------------
+
+
+#=========================================
+KEY                           DATA_SECTION
+KEY DATA
+#-----------------------------------------
+CALC_ON_THE_FLY_OBSERVABLES			1
+ENERGY_KIN_SUM						0
+ENERGY_POT_SUM						0
+ENERGY_ROT_SUM						0
+ENERGY_TOTAL_SUM					0	
+ENERGY_KIN_ON_THE_FLY				0
+ENERGY_POT_ON_THE_FLY				0
+ENERGY_ROT_ON_THE_FLY				0
+ENERGY_TOTAL_ON_THE_FLY				0
+MOMENT_OF_INERTIA					0
+#--------------
+
+
+#=========================================
+KEY                       TOPOLOGY_SECTION
+KEY CHAIN TOPOLOGY
+#-----------------------------------------
+CUBE_DIST_PARTICLES_IN_LIN_CHAIN	0.97
+CUBE_DIST_BETWEEN_LIN_CHAINS		1.12246204830937298142
+INIT_RANDOM_WALK_SET_UP				1
+NUM_BRANCHED_MOLECULES_TOTAL		0
+NUM_PARTICLES_IN_BACKBONE			51
+NUM_ARMS_PER_BRANCHED_MOLECULE		4					#for actin-myosin use armlenght of 0 in order to have a long linear chain
+NUM_PARTICLES_PER_ARM				25
+DIST_ARMS_ALONG_BACKBONE		    0
+START_BACKBONE_BRANCHING_HERE		25
+HYDROPHOBIC_TOPOLOGY                0						# 0: no hydrophobicity; 1: hydrophobic backbone; 2: bottle brush half hydrophobic; 3: hydrophobic star; 4: actin-myosin
+START_HYDROPHOBIC                   0
+TOPOLOGY_SPECIAL_INDEX				0
+#------------------------------------------
+
+
+# =========================================
+# KEY                           FEM_SECTION
+# KEY FEM
+#------------------------------------------
+NUM_GRAINS_TOTAL					50
+NUM_GRAIN_CYCLES					5000
+GRAIN_RATE_SAVE_SYSTEM				0	
+GRAIN_RATE_SAVE_DATA				100	
+GRAIN_CALC_ON_THE_FLY    			1
+GRAIN_DENSITY						1.0	
+GRAIN_BOXX							10.0	
+GRAIN_BOXY							10.0
+GRAIN_BOXZ							10.0
+GRAIN_TIMESTEP						0.1	
+GRAIN_TEMPERATURE					1.2
+GRAIN_INIT_RANDOM					1
+GRAIN_INIT_SEND_MAIL				0
+GRAIN_INIT_CHECK_SETUP				1	
+GRID_FINENESS_X                	 	30
+GRID_FINENESS_Y						30
+GRID_FINENESS_Z						30
+SIZE_DISTRIBUTION               	1
+# ----------------------------------------
+#
+#
+# ========================================
+# KEY                     GRANULAR_SECTION
+# KEY GRANULAR
+# ----------------------------------------
+GM_RANDINIT							0       # not used at the moment
+GM_SIZE								1.0     # not used at the moment
+GM_POT_WARMUP                   	10.0
+GM_POT_REPULSION                	10.0
+GM_POT_COHESION                 	15.0
+GM_COMPACTNESS                  	1.200
+GM_RELAXSTEPS                   	1000
+GM_BREAKING_TYPE                	2       # 0 = radius, 1 = absolute, 2 = relative to d0
+GM_BREAKING_LIMIT               	1.05
+GM_FORCE_BC                     	0
+GM_POS_BC                       	2       # 1= uniaxial load(x), 2=biaxial loas(x/y) 3=shearing 
+GM_BOUNDARY_VALUEA              	0.005
+GM_BOUNDARY_VALUEB              	0.0
+# -----------------------------------------
